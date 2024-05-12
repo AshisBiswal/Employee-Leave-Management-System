@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js'></script>
+
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+   
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.11/index.global.min.js'></script>
+    <title>Document</title>
+
+</head>
+<body>
+    <div id="calendar"></div>
+    <a href="{% url 'manager'    %}"><button>Back</button></a>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: '/leave_events/', // URL to fetch leave events data
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            eventClick: function(info) {
+                // Handle event click if needed
+                console.log(info.event.title);
+            },
+            loading: function(isLoading) {
+                // Handle loading state if needed
+                console.log(isLoading ? 'Calendar is loading' : 'Calendar is done loading');
+            },
+        });
+        calendar.render();
+    });
+</script>
+</html>

@@ -1,0 +1,188 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Leave Calendar</title>
+    <script src='https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.11/index.global.min.js'></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; 
+            color: #4CAF50; 
+            display: flex;
+            flex-direction: row;
+        }
+
+        #sidebar {
+            background-color: aliceblue;
+            width: 250px;
+            height: 150vh; 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; 
+            justify-content: flex-start; 
+            position: relative; 
+        }
+
+        #sidebar p {
+            color: #f0f0f0;
+            padding: 10px;
+            margin-bottom: 20px;
+            margin-left: 20px;
+            
+        }
+
+        #sidebar a {
+            color: black;
+            text-decoration: none;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        #sidebar a:hover {
+            background-color: #555; 
+            color: #f0f0f0;
+        }
+
+        #sidebar img {
+            margin-right: 10px;
+            width: 20px; 
+            height: 20px; 
+        }
+
+        #logo-container {
+            
+            top: 10px;
+            left: 20px;
+            bottom: 10px;
+            display: flex;
+           
+            margin: 10px;
+        }
+
+        #logo {
+            width: 40px; 
+            height: 40px; 
+        }
+
+        #elms {
+            color: black;
+            font-size: 24px; 
+            margin-left: 10px; 
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #user-section {
+            position: absolute;
+            top: 10px;
+            right: 20px; 
+            color: black;
+            display: flex;
+            align-items: center; 
+        }
+
+        #user-section img {
+            margin-right: 5px; 
+            height: 20px;
+            width: 20px; 
+        }
+
+        #calendar-container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        #calendar {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff; 
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333; 
+        }
+
+        h1 img {
+            margin-right: 10px;
+            width: 30px;
+            height: 30px; 
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <div id="logo-container">
+            <img id="logo" src="{% static 'logo.png' %}" alt="Logo"> 
+            <div id="elms">ELMS</div> 
+        </div>
+        <a href="{% url 'requests' %}">
+            <img src="{% static 'requests.png' %}" alt="Requests"> 
+            Requests
+        </a>
+        <a href="{% url 'notifications' %}">
+            <img src="{% static 'notification.png' %}" alt="Notifications"> 
+            Notifications
+        </a>
+        <a href="{% url 'profile_update'  %}">
+            <img src="{% static 'profile_logo.jpg' %}" alt="Update Profile"> 
+            Update Profile
+        </a>
+        <a href="{% url 'login' %}">
+            <img src="{% static 'logout.webp' %}" alt="Logout"> 
+            Logout
+        </a>
+    </div>
+    <div id="user-section">
+        <img src="{%  static 'profile_logo.jpg'   %}"  style="height: 20px; width: 20px;"  alt="">
+        <p>{{request.user}}</p>
+    </div>
+    <div id="calendar-container">
+        <h1>
+            <img src="{% static 'calendar.png' %}" alt="Calendar"> 
+            Employee Leave Calendar
+        </h1>
+        <div id="calendar"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '/leave_events/', 
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                eventClick: function(info) {
+                    
+                    console.log(info.event.title);
+                },
+                loading: function(isLoading) {
+                  
+                    console.log(isLoading ? 'Calendar is loading' : 'Calendar is done loading');
+                },
+            });
+            calendar.render();
+        });
+    </script>
+</body>
+</html>
